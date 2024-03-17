@@ -46,7 +46,7 @@
 <button id="selectAudioButton">音声選択</button>
 
 <audio id="chimeSound">
-  <source src="call.mp3" type="audio/mpeg">
+  <source src="https://seiumiyata.github.io/chime/call.mp3" type="audio/mpeg">
   このブラウザは音声をサポートしていません。
 </audio>
 
@@ -79,21 +79,19 @@
             const objectURL = URL.createObjectURL(selectedFile);
             chimeSound.src = objectURL;
         } else {
-            // 音声ファイルが選択されなかった場合は、デフォルトの音声ファイルを使用する
-            chimeSound.src = "call.mp3";
+            // 音声ファイルが選択されなかった場合は、指定URLの音声ファイルを使用する
+            chimeSound.src = "https://seiumiyata.github.io/chime/call.mp3";
         }
     });
 
     // 再生ボタンにクリックイベントリスナーを追加
     playButton.addEventListener('click', function() {
-        // 音声ファイルが設定されているかを確認し、設定されている場合にのみ再生する
-        if (chimeSound.src) {
-            chimeSound.play();
-            setTimeout(function() {
-                chimeSound.pause();
-                chimeSound.currentTime = 0;
-            }, 10000); // 10 seconds
-        }
+        // 音声を再生する
+        chimeSound.play();
+        setTimeout(function() {
+            chimeSound.pause();
+            chimeSound.currentTime = 0;
+        }, 10000); // 10 seconds
     });
 </script>
 
