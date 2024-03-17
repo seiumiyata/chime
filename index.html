@@ -1,99 +1,79 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>チャイムアプリ</title>
-<style>
-    body {
-        background-color: #333;
-        color: #fff;
-        font-family: Arial, sans-serif;
-        text-align: center;
-        height: 100vh;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>チャイムアプリ</title>
+    <style>
+        body {
+            background-color: #333;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
 
-    #playButton {
-        padding: 20px;
-        font-size: 48px;
-        cursor: pointer;
-        background-color: transparent;
-        color: #fff;
-        border: none;
-        border-radius: 50%;
-        margin-bottom: 20px;
-    }
+        #playButton {
+            padding: 20px;
+            font-size: 48px;
+            cursor: pointer;
+            background-color: transparent;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
 
-    #selectAudioButton {
-        font-size: 14px;
-        padding: 5px 10px;
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-    }
-</style>
+        #selectAudioButton {
+            font-size: 14px;
+            padding: 5px 10px;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+        }
+    </style>
 </head>
 <body>
+    <button id="playButton">呼び出し</button>
+    <input type="file" id="audioInput" accept="audio/*" style="display: none;">
+    <button id="selectAudioButton">音声選択</button>
+    <audio id="chimeSound">
+        <source src="https://seiumiyata.github.io/chime/call.mp3" type="audio/mpeg">
+        このブラウザは音声をサポートしていません。
+    </audio>
 
-<button id="playButton" disabled>呼び出し</button>
+    <script>
+        const audioInput = document.getElementById('audioInput');
+        const selectAudioButton = document.getElementById('selectAudioButton');
+        const playButton = document.getElementById('playButton');
+        const chimeSound = document.getElementById('chimeSound');
 
-<input type="file" id="audioInput" accept="audio/*" style="display: none;">
-<button id="selectAudioButton">音声選択</button>
+        selectAudioButton.addEventListener('click', function() {
+            audioInput.click();
+        });
 
-<audio id="chimeSound">
-  <source src="https://seiumiyata.github.io/chime/call.mp3" type="audio/mpeg">
-  このブラウザは音声をサポートしていません。
-</audio>
+        audioInput.addEventListener('change', function() {
+            const selectedFile = audioInput.files[0];
+            if (selectedFile) {
+                const objectURL = URL.createObjectURL(selectedFile);
+                chimeSound.src = objectURL;
+            } else {
+                chimeSound.src = 'https://seiumiyata.github.io/chime/call.mp3';
+            }
+        });
 
-<script>
-    // 音声ファイルを選択するためのinput要素を取得
-    const audioInput = document.getElementById('audioInput');
-
-    // 音声ファイル選択ボタンを取得
-    const selectAudioButton = document.getElementById('selectAudioButton');
-
-    // 再生ボタンを取得
-    const playButton = document.getElementById('playButton');
-
-    // audio要素を取得
-    const chimeSound = document.getElementById('chimeSound');
-
-    // 音声ファイル選択ボタンにクリックイベントリスナーを追加
-    selectAudioButton.addEventListener('click', function() {
-        audioInput.click();
-    });
-
-    // inputに変更イベントリスナーを追加
-    audioInput.addEventListener('change', function() {
-        // 音声ファイルが選択された場合、再生ボタンを有効にする
-        playButton.disabled = false;
-
-        // audio要素のソースを選択されたファイルに設定する
-        const selectedFile = audioInput.files[0];
-        if (selectedFile) {
-            const objectURL = URL.createObjectURL(selectedFile);
-            chimeSound.src = objectURL;
-        } else {
-            // 音声ファイルが選択されなかった場合は、指定URLの音声ファイルを使用する
-            chimeSound.src = "https://seiumiyata.github.io/chime/call.mp3";
-        }
-    });
-
-    // 再生ボタンにクリックイベントリスナーを追加
-    playButton.addEventListener('click', function() {
-        // 音声を再生する
-        chimeSound.play();
-        setTimeout(function() {
-            chimeSound.pause();
-            chimeSound.currentTime = 0;
-        }, 10000); // 10 seconds
-    });
-</script>
-
+        playButton.addEventListener('click', function() {
+            chimeSound.play();
+            setTimeout(function() {
+                chimeSound.pause();
+                chimeSound.currentTime = 0;
+            }, 10000);
+        });
+    </script>
 </body>
 </html>
